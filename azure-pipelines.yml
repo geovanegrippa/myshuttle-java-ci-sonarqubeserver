@@ -4,11 +4,12 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- none
 
 pool:
-  vmImage: ubuntu-18.04
+  name: 'pool-dev-001'
   demands:
+  - agent.name -equals az-agent-dev-linux-001
   - java
   - maven  
 
