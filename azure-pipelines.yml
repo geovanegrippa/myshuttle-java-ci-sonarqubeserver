@@ -7,30 +7,30 @@ trigger:
 - none
 
 pool:
-  name: 'pool-dev-001'
+  name: 'pool_linux_01'
   demands:
-  - agent.name -equals az-agent-dev-linux-001
+  - agent.name -equals vm-agent-linux-01
   - java
   - maven  
 
 steps:
-- task: SonarQubePrepare@4
+- task: SonarQubePrepare@7
   inputs:
-   SonarQube: 'SonarQube'
-   scannerMode: 'CLI'
-   configMode: 'file'
-   configFile: 'sonar-project-properties'
-   extraProperties: |
-     # Additional properties that will be passed to the scanner, 
-     # Put one key=value per line, example:
-     # sonar.exclusions=**/*.bin
-     sonar.projectKey=MyShuttle
+    SonarQube: 'sc_sonar_myshuttle'
+    scannerMode: 'cli'
+    cliScannerVersion: '7.2.0.5079'
+    configMode: 'manual'
+    cliProjectKey: 'MyShuttle'
+    cliProjectName: 'MyShuttle'
+    cliSources: '.'
 
-- task: SonarQubeAnalyze@4
-
-- task: SonarQubePublish@4
+- task: SonarQubeAnalyze@7
   inputs:
-   pollingTimeoutSec: '300'
+    jdkversion: 'JAVA_HOME'
+
+- task: SonarQubePublish@7
+  inputs:
+    pollingTimeoutSec: '300'
 
 - task: Maven@3
   displayName: Maven
