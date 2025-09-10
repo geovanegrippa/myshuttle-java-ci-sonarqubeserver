@@ -18,12 +18,15 @@ variables:
 
 steps:
 
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y openjdk-11-jdk
-    echo "##vso[task.setvariable variable=JAVA_HOME]/usr/lib/jvm/java-11-openjdk-amd64"
-    echo "##vso[task.setvariable variable=PATH]/usr/lib/jvm/java-11-openjdk-amd64/bin:$(PATH)"
+- task: Bash@3
   displayName: "Instalar e configurar Java 11"
+  inputs:
+    targetType: 'inline'
+    script: |
+      sudo apt-get update
+      sudo apt-get install -y openjdk-11-jdk
+      echo "##vso[task.setvariable variable=JAVA_HOME]/usr/lib/jvm/java-11-openjdk-amd64"
+      echo "##vso[task.setvariable variable=PATH]/usr/lib/jvm/java-11-openjdk-amd64/bin:$(PATH)"
 
 - task: Bash@3
   displayName: 'Detectar e exportar JAVA_HOME para o pipeline'
@@ -66,14 +69,6 @@ steps:
     cliProjectName: 'MyShuttle'
     cliSources: '.'
 
-- task: SonarQubeAnalyze@7
-  inputs:
-    jdkversion: 'JAVA_HOME'
-
-- task: SonarQubePublish@7
-  inputs:
-    pollingTimeoutSec: '300'
-
 - task: Maven@3
   displayName: Maven
   inputs:
@@ -88,6 +83,14 @@ steps:
     mavenAuthenticateFeed: true
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
+
+- task: SonarQubeAnalyze@7
+  inputs:
+    jdkversion: 'JAVA_HOME'
+
+- task: SonarQubePublish@7
+  inputs:
+    pollingTimeoutSec: '300'
 
 - task: CopyFiles@2
   displayName: 'Copy Files'
