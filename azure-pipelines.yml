@@ -73,6 +73,8 @@ steps:
   displayName: Maven
   inputs:
     mavenPomFile: 'pom.xml'
+    goals: 'clean verify'
+    options: '-Dmaven.test.failure.ignore=false'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     testRunTitle: 'MyShuttle'
