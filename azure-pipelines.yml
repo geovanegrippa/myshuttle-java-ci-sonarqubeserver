@@ -17,6 +17,39 @@ variables:
   NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/sonar.crt
 
 steps:
+
+- task: Bash@3
+  displayName: 'Detectar e exportar JAVA_HOME para o pipeline'
+  inputs:
+    targetType: 'inline'
+    script: |
+      set -e
+      # localizar java
+      JAVA_BIN=$(command -v java || true)
+      if [ -z "$JAVA_BIN" ]; then
+        echo "##vso[task.logissue type=error]java não encontrado no PATH do agente"
+        exit 1
+      fi
+
+      # resolve o caminho real do binário e calcula JAVA_HOME
+      JAVA_PATH=$(readlink -f "$JAVA_BIN")
+      JAVA_HOME_DIR=$(dirname "$(dirname "$JAVA_PATH")")
+
+      echo "Detected java binary: $JAVA_BIN"
+      echo "Resolved java path: $JAVA_PATH"
+      echo "Detected JAVA_HOME: $JAVA_HOME_DIR"
+
+      # define variável do pipeline (disponível nos próximos steps como env var)
+      echo "##vso[task.setvariable variable=JAVA_HOME]$JAVA_HOME_DIR"
+
+      # também exporta pra etapa atual (útil se executar comandos nessa mesma step)
+      export JAVA_HOME="$JAVA_HOME_DIR"
+      export PATH="$JAVA_HOME/bin:$PATH"
+
+      # debug rápido
+      java -version
+      echo "JAVA_HOME (env nesta step) = $JAVA_HOME"
+
 - task: SonarQubePrepare@7
   inputs:
     SonarQube: 'sc_sonar_myshuttle'
