@@ -18,6 +18,12 @@ variables:
 
 steps:
 
+- task: JavaToolInstaller@1
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    cleanDestinationDirectory: true
+
 - task: Bash@3
   displayName: 'Detectar e exportar JAVA_HOME para o pipeline'
   inputs:
