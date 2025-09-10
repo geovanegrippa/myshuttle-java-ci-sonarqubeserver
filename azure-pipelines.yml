@@ -54,6 +54,7 @@ steps:
   inputs:
     SonarQube: 'sc_sonar_myshuttle'
     scannerMode: 'cli'
+    cliScannerVersion: '4.8.0.2856'
     configMode: 'manual'
     cliProjectKey: 'MyShuttle'
     cliProjectName: 'MyShuttle'
