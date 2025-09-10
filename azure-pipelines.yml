@@ -22,7 +22,7 @@ steps:
   inputs:
     versionSpec: '21'
     jdkArchitectureOption: 'x64'
-    cleanDestinationDirectory: true
+    jdkSourceOption: 'PreInstalled'
 
 - task: Bash@3
   displayName: 'Detectar e exportar JAVA_HOME para o pipeline'
