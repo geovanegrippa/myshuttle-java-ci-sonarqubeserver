@@ -13,6 +13,9 @@ pool:
   - java
   - maven  
 
+variables:
+  NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/sonar.crt
+
 steps:
 - task: SonarQubePrepare@7
   inputs:
