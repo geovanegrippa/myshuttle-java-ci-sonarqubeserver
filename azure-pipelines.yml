@@ -61,6 +61,7 @@ steps:
       echo "JAVA_HOME (env nesta step) = $JAVA_HOME"
 
 - task: SonarQubePrepare@7
+  displayName: 'SonarQube Prepare'
   inputs:
     SonarQube: 'sc_sonar_myshuttle'
     scannerMode: 'cli'
@@ -87,12 +88,19 @@ steps:
     sonarQubeRunAnalysis: false
 
 - task: SonarQubeAnalyze@7
+  displayName: 'SonarQube Analyze'
   inputs:
     jdkversion: 'JAVA_HOME'
 
 - task: SonarQubePublish@7
+  displayName: 'SonarQube Publish'
   inputs:
     pollingTimeoutSec: '300'
+
+- task: sonar-buildbreaker@8
+  displayName: 'SonarQube QualityGate'
+  inputs:
+    SonarQube: 'sc_sonar_myshuttle'
 
 - task: CopyFiles@2
   displayName: 'Copy Files'
