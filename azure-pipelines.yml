@@ -75,16 +75,8 @@ steps:
     mavenPomFile: 'pom.xml'
     goals: 'clean verify'
     options: '-Dmaven.test.failure.ignore=false'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    testRunTitle: 'MyShuttle'
     codeCoverageToolOption: 'JaCoCo'
-    codeCoverageClassFilesDirectories: 'src/main'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: true
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    testResultsFiles: '**/TEST-*.xml'
 
 - task: SonarQubeAnalyze@7
   inputs:
