@@ -68,24 +68,23 @@ steps:
     cliProjectKey: 'MyShuttle'
     cliProjectName: 'MyShuttle'
     cliSources: '.'
+    extraProperties: |
+      sonar.java.binaries=target/classes
 
 - task: Maven@3
-  displayName: 'Build + Test + Sonar'
+  displayName: Maven
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     testRunTitle: 'MyShuttle'
     codeCoverageToolOption: 'JaCoCo'
-    codeCoverageClassFilesDirectories: 'target/classes'
+    codeCoverageClassFilesDirectories: 'src/main'
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: true
     effectivePomSkip: false
-    goals: 'clean verify sonar:sonar'
-    options: >
-      -Dsonar.projectKey=MyShuttle
-      -Dsonar.projectName=MyShuttle
+    sonarQubeRunAnalysis: false
 
 - task: SonarQubeAnalyze@7
   inputs:
