@@ -102,6 +102,23 @@ steps:
   inputs:
     SonarQube: 'sc_sonar_myshuttle'
 
+- task: Bash@3
+  displayName: 'Fail pipeline if Quality Gate failed'
+  inputs:
+    targetType: 'inline'
+    script: |
+      STATUS=$(curl -s -u $(SONAR_TOKEN): \
+        "$(SONAR_HOST_URL)/api/qualitygates/project_status?projectKey=MyShuttle" \
+        | jq -r '.projectStatus.status')
+
+      echo "Quality Gate status: $STATUS"
+
+      if [ "$STATUS" != "OK" ]; then
+        echo "##vso[task.logissue type=error]Quality Gate failed: $STATUS"
+        exit 1
+      fi
+
+
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
