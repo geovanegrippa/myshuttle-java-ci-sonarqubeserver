@@ -14,9 +14,17 @@ public class FaresTest {
   
   public static DateFormat defaultDF;
 
+/* 
+  Trecho não deixando prosseguir com o pipeline, substituído pelo trecho abaixo.
   @BeforeClass
   public static void setupDateFormat() {
     defaultDF = DateFormat.getDateTimeInstance();
+  }
+*/
+
+  @BeforeClass
+  public static void setupDateFormat() {
+    defaultDF = new java.text.SimpleDateFormat("MMM d, yyyy h:mm:ss a", java.util.Locale.ENGLISH);
   }
 
   public Date startTime;
