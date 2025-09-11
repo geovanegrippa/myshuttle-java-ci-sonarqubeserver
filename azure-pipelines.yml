@@ -73,9 +73,7 @@ steps:
   displayName: Maven
   inputs:
     mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    testRunTitle: 'MyShuttle'
+    publishJUnitResults: false
     codeCoverageToolOption: 'JaCoCo'
     codeCoverageClassFilesDirectories: 'src/main'
     javaHomeOption: 'JDKVersion'
