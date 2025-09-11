@@ -75,7 +75,7 @@ steps:
     mavenPomFile: 'pom.xml'
     goals: 'clean verify'
     options: '-Dmaven.test.failure.ignore=false'
-    publishJUnitResults: true
+    publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     testRunTitle: 'MyShuttle'
     codeCoverageToolOption: 'JaCoCo'
