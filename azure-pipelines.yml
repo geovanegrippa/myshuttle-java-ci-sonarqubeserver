@@ -64,7 +64,7 @@ steps:
       sonar.java.libraries=target/**/*.jar
 
 - task: Maven@4
-  displayName: Maven
+  displayName: 'Build/Test Maven'
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
