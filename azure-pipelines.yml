@@ -14,6 +14,7 @@ pool:
   - maven  
 
 variables:
+  system.debug: false
   NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/sonar.crt
 
 steps:
@@ -39,10 +40,9 @@ steps:
       echo "Resolved java path: $JAVA_PATH"
       echo "Detected JAVA_HOME: $JAVA_HOME_DIR"
 
-      # define variável do pipeline (disponível nos próximos steps como env var)
+      # define variável do pipeline
       echo "##vso[task.setvariable variable=JAVA_HOME]$JAVA_HOME_DIR"
 
-      # também exporta pra etapa atual (útil se executar comandos nessa mesma step)
       export JAVA_HOME="$JAVA_HOME_DIR"
       export PATH="$JAVA_HOME/bin:$PATH"
 
@@ -56,28 +56,12 @@ steps:
     SonarQube: 'sc_sonar_myshuttle'
     scannerMode: 'cli'
     configMode: 'manual'
-    cliProjectKey: 'Key_MyShuttle'
-    cliProjectName: 'MyShuttle'
+    cliProjectKey: '$(SONARQUBE_PROJECT_KEY)'
+    cliProjectName: '$(SONARQUBE_PROJECT_NAME)'
     cliSources: '.'
     extraProperties: |
       sonar.java.binaries=target/classes
       sonar.java.libraries=target/**/*.jar
-
-- task: Maven@3
-  displayName: Maven
-  condition: false
-  inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    testRunTitle: 'MyShuttle'
-    codeCoverageToolOption: 'JaCoCo'
-    codeCoverageClassFilesDirectories: 'src/main'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: true
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
 
 - task: Maven@4
   displayName: Maven
@@ -90,7 +74,7 @@ steps:
     codeCoverageClassFilesDirectories: 'src/main'
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: true
+    mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
 
