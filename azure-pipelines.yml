@@ -13,11 +13,7 @@ pool:
   - java
   - maven  
 
-variables:
-  NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/sonar.crt
-
 steps:
-
 - task: Bash@3
   displayName: 'Detectar e exportar JAVA_HOME para o pipeline'
   condition: false
@@ -53,6 +49,8 @@ steps:
 
 - task: SonarQubePrepare@7
   displayName: 'SonarQube Prepare'
+  env:
+    NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/sonar.crt
   inputs:
     SonarQube: 'sc_sonar_myshuttle'
     scannerMode: 'cli'
@@ -62,8 +60,25 @@ steps:
     cliSources: '.'
     extraProperties: |
       sonar.java.binaries=target/classes
+      sonar.java.libraries=target/**/*.jar
 
 - task: Maven@3
+  displayName: Maven
+  condition: false
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    testRunTitle: 'MyShuttle'
+    codeCoverageToolOption: 'JaCoCo'
+    codeCoverageClassFilesDirectories: 'src/main'
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: true
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+
+- task: Maven@4
   displayName: Maven
   inputs:
     mavenPomFile: 'pom.xml'
