@@ -20,6 +20,7 @@ steps:
 
 - task: Bash@3
   displayName: "Instalar e configurar Java 11"
+  condition: false
   inputs:
     targetType: 'inline'
     script: |
@@ -97,13 +98,8 @@ steps:
   inputs:
     pollingTimeoutSec: '300'
 
-- task: sonar-buildbreaker@8
-  displayName: 'SonarQube QualityGate'
-  inputs:
-    SonarQube: 'sc_sonar_myshuttle'
-
 - task: Bash@3
-  displayName: 'Fail pipeline if Quality Gate failed'
+  displayName: 'Quality Gate'
   inputs:
     targetType: 'inline'
     script: |
@@ -117,7 +113,6 @@ steps:
         echo "##vso[task.logissue type=error]Quality Gate failed: $STATUS"
         exit 1
       fi
-
 
 - task: CopyFiles@2
   displayName: 'Copy Files'
