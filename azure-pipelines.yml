@@ -86,7 +86,7 @@ steps:
 - task: SonarQubePublish@7
   displayName: 'SonarQube Publish'
   inputs:
-    pollingTimeoutSec: '300'
+    pollingTimeoutSec: '600'
 
 - task: Bash@3
   displayName: 'Quality Gate Status'
