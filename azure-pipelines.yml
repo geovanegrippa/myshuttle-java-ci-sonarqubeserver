@@ -31,6 +31,7 @@ steps:
 
 - task: Bash@3
   displayName: 'Detectar e exportar JAVA_HOME para o pipeline'
+  condition: false
   inputs:
     targetType: 'inline'
     script: |
