@@ -108,7 +108,7 @@ steps:
     targetType: 'inline'
     script: |
       STATUS=$(curl -s -u $(SONAR_TOKEN): \
-        "$(SONAR_HOST_URL)/api/qualitygates/project_status?projectKey=MyShuttle" \
+        "$(SONAR_HOST_URL)/api/qualitygates/project_status?projectKey=Key_MyShuttle" \
         | jq -r '.projectStatus.status')
 
       echo "Quality Gate status: $STATUS"
