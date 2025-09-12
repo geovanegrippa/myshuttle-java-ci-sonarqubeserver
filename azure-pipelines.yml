@@ -90,7 +90,6 @@ steps:
 
 - task: Bash@3
   displayName: 'Quality Gate Status'
-  condition: false
   inputs:
     targetType: 'inline'
     script: |
