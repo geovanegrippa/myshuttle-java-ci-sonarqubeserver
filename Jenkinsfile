@@ -34,6 +34,36 @@ pipeline {
             }
         }
 
+        stage('Build/Test Maven') {
+            steps {
+                sh '''
+                    mvn clean verify \
+                      -Dmaven.test.failure.ignore=false \
+                      -Dsonar.skip=true
+                '''
+            }
+            post {
+                always {
+                    junit '**/TEST-*.xml'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube_server') {
+                    sh '''
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
+                        -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
+                        -Dsonar.host.url=$SONAR_HOST_URL \
+                        -Dsonar.login=$SONAR_TOKEN
+                        -Dsonar.sources=. \
+                        -Dsonar.java.binaries=target/classes \
+                        -Dsonar.java.libraries=target/**/*.jar
+                    '''
+            }
+        }
 
     }
 }
