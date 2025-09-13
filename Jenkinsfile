@@ -56,8 +56,6 @@ pipeline {
                         mvn sonar:sonar \
                         -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
                         -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
-                        -Dsonar.host.url=$SONAR_HOST_URL \
-                        -Dsonar.login=$SONAR_TOKEN
                         -Dsonar.sources=. \
                         -Dsonar.java.binaries=target/classes \
                         -Dsonar.java.libraries=target/**/*.jar
