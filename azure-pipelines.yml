@@ -60,8 +60,8 @@ steps:
     cliProjectName: '$(SONARQUBE_PROJECT_NAME)'
     cliSources: '.'
     extraProperties: |
-      sonar.java.binaries=target/classes
-      sonar.java.libraries=target/**/*.jar
+      sonar.java.binaries=$(Build.SourcesDirectory)/target/classes
+      sonar.java.libraries=$(Build.SourcesDirectory)/target/**/*.jar
 
 - task: Maven@4
   displayName: 'Build/Test Maven'
