@@ -60,8 +60,8 @@ Antes de rodar o pipeline, configure os seguintes pontos:
 - [Azure DevOps Marketplace - SonarQube](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarqube)  
 - [Quality Gates - SonarQube](https://docs.sonarqube.org/latest/user-guide/quality-gates/)
 
-
+---
 
 ![Quality Gate Status](https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver/blob/master/Quality%20Gate%20Status.jpg)
-
 ![SonarQube Server Analysis Report](https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver/blob/master/SonarQube%20Server%20Analysis%20Report.jpg)
+
