@@ -63,6 +63,10 @@ pipeline {
                             -file sonarqube.crt \
                             -storepass changeit \
                             -noprompt
+
+                            # copiar e atualizar Certificates
+                            cp sonarqube.crt /usr/local/share/ca-certificates/sonar.crt
+                            sudo update-ca-certificates
                         """
                     }
                 }
