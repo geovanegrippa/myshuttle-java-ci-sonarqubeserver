@@ -2,7 +2,7 @@ pipeline {
     agent { label 'vm-agent-linux-01' }
 
     environment {
-        //NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
+        NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/sonar.crt
         SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')
         SONARQUBE_PROJECT_NAME = "MyShuttle"
         SONAR_HOST_URL = "https://sonarqube.local"
