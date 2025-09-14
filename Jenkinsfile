@@ -80,7 +80,6 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.java.binaries=target/classes \
                             -Dsonar.java.libraries=target/**/*.jar
-                            -Djavax.net.ssl.trustStorePassword=changeit
                     '''
                 }
             }
