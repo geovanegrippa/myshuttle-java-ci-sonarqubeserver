@@ -42,6 +42,10 @@ pipeline {
                             # Baixar o certificado do servidor
                             echo | openssl s_client -connect sonarqube.local:443 -servername sonarqube.local | openssl x509 -outform PEM > sonarqube.crt
 
+                            # copiar e atualizar Certificates
+                            cp sonarqube.crt /usr/local/share/ca-certificates/sonar.crt
+                            sudo update-ca-certificates
+
                             # Importar no truststore do Java
                             sudo keytool -import -alias sonarqube \
                             -keystore /usr/local/share/ca-certificates/sonar.jks \
@@ -49,9 +53,6 @@ pipeline {
                             -storepass changeit \
                             -noprompt
 
-                            # copiar e atualizar Certificates
-                            cp sonarqube.crt /usr/local/share/ca-certificates/sonar.crt
-                            sudo update-ca-certificates
                         """
                     }
                 }
