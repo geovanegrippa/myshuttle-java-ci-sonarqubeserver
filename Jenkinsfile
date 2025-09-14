@@ -72,9 +72,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube_server') {
-                    sh '''
-                        //export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
-                        
+                    sh '''                      
                         /opt/sonar-scanner/bin/sonar-scanner \
                             -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
                             -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
