@@ -11,7 +11,7 @@ pipeline {
 
     stages {
         stage('Detectar JAVA_HOME') {
-            when { expression { true } }
+            when { expression { false } }
             steps {
                 sh '''
                     set -e
@@ -34,7 +34,7 @@ pipeline {
         }
 
         stage('Preparar certificado') {
-            when { expression { true } }
+            when { expression { false } }
             steps {
                 script {
                     if (!fileExists('/usr/local/share/ca-certificates/sonar.crt')) {
