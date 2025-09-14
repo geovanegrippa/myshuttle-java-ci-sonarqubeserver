@@ -33,6 +33,31 @@ pipeline {
             }
         }
 
+        stage('Preparar certificado') {
+            when { expression { true } }
+            steps {
+                script {
+                    if (!fileExists('/usr/local/share/ca-certificates/sonar.crt')) {
+                        sh """
+                            # Baixar o certificado do servidor
+                            echo | openssl s_client -connect sonarqube.local:443 -servername sonarqube.local | openssl x509 -outform PEM > sonarqube.crt
+
+                            # Importar no truststore do Java
+                            sudo keytool -import -alias sonarqube \
+                            -keystore /usr/local/share/ca-certificates/sonar.jks \
+                            -file sonarqube.crt \
+                            -storepass changeit \
+                            -noprompt
+
+                            # copiar e atualizar Certificates
+                            cp sonarqube.crt /usr/local/share/ca-certificates/sonar.crt
+                            sudo update-ca-certificates
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Build/Test Maven') {
             steps {
                 sh '''
@@ -44,31 +69,6 @@ pipeline {
             post {
                 always {
                     junit '**/TEST-*.xml'
-                }
-            }
-        }
-
-        stage('Preparar certificado') {
-            when { expression { true } }
-            steps {
-                script {
-                    if (!fileExists(env.SONAR_KEYSTORE)) {
-                        sh """
-                            # Baixar o certificado do servidor
-                            echo | openssl s_client -connect sonarqube.local:443 -servername sonarqube.local | openssl x509 -outform PEM > sonarqube.crt
-
-                            # Importar no truststore do Java
-                            sudo keytool -import -alias sonarqube \
-                            -keystore $JAVA_HOME/lib/security/cacerts \
-                            -file sonarqube.crt \
-                            -storepass changeit \
-                            -noprompt
-
-                            # copiar e atualizar Certificates
-                            cp sonarqube.crt /usr/local/share/ca-certificates/sonar.crt
-                            sudo update-ca-certificates
-                        """
-                    }
                 }
             }
         }
