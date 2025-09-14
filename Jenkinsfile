@@ -5,16 +5,13 @@ pipeline {
         SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')
         SONARQUBE_PROJECT_NAME = "MyShuttle"
         SONAR_HOST_URL = "https://sonarqube.local"
-        SONAR_TOKEN = credentials('sonar_token') 
-        SONAR_CERT_PATH = "/usr/local/share/ca-certificates/sonar.crt"
-        SONAR_KEYSTORE = "/usr/local/share/ca-certificates/sonar.jks"
         NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
         JAVA_TOOL_OPTIONS = "-Djavax.net.ssl.trustStore=/usr/local/share/ca-certificates/sonar.jks -Djavax.net.ssl.trustStorePassword=changeit"
     }
 
     stages {
         stage('Detectar JAVA_HOME') {
-            when { expression { true } }
+            when { expression { false } }
             steps {
                 sh '''
                     set -e
@@ -52,15 +49,18 @@ pipeline {
         }
 
         stage('Preparar certificado') {
+            when { expression { false } }
             steps {
                 script {
-                    // Verifica se o keystore já existe, se não cria
                     if (!fileExists(env.SONAR_KEYSTORE)) {
                         sh """
-                        keytool -importcert \
-                            -file ${env.SONAR_CERT_PATH} \
-                            -alias sonar \
-                            -keystore ${env.SONAR_KEYSTORE} \
+                            # Baixar o certificado do servidor
+                            echo | openssl s_client -connect sonarqube.local:443 -servername sonarqube.local | openssl x509 -outform PEM > sonarqube.crt
+
+                            # Importar no truststore do Java
+                            sudo keytool -import -alias sonarqube \
+                            -keystore $JAVA_HOME/lib/security/cacerts \
+                            -file sonarqube.crt \
                             -storepass changeit \
                             -noprompt
                         """
@@ -79,7 +79,6 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.java.binaries=target/classes \
                             -Dsonar.java.libraries=target/**/*.jar \
-                            -Dsonar.login=$SONAR_TOKEN
                     '''
                 }
             }
