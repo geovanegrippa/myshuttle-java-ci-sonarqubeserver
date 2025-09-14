@@ -49,7 +49,7 @@ pipeline {
         }
 
         stage('Preparar certificado') {
-            when { expression { false } }
+            when { expression { true } }
             steps {
                 script {
                     if (!fileExists(env.SONAR_KEYSTORE)) {
