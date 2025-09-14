@@ -8,6 +8,8 @@ pipeline {
         SONARQUBE_PROJECT_NAME = "MyShuttle"
         SONAR_HOST_URL = "https://sonarqube.local"
         SONAR_TOKEN = credentials('sonar_token')  // precisa estar configurado no Jenkins
+        SONAR_CERT_PATH = "/usr/local/share/ca-certificates/sonar.crt"
+        SONAR_KEYSTORE = "/usr/local/share/ca-certificates/sonar.jks"
     }
 
     stages {
@@ -49,16 +51,36 @@ pipeline {
             }
         }
 
+        stage('Preparar certificado') {
+            steps {
+                script {
+                    // Verifica se o keystore já existe, se não cria
+                    if (!fileExists(env.SONAR_KEYSTORE)) {
+                        sh """
+                        keytool -importcert \
+                            -file ${env.SONAR_CERT_PATH} \
+                            -alias sonar \
+                            -keystore ${env.SONAR_KEYSTORE} \
+                            -storepass changeit \
+                            -noprompt
+                        """
+                    }
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube_server') {
                     sh '''
+                        export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
                         /opt/sonar-scanner/bin/sonar-scanner \
-                        -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
-                        -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
-                        -Dsonar.sources=. \
-                        -Dsonar.java.binaries=target/classes \
-                        -Dsonar.java.libraries=target/**/*.jar
+                            -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
+                            -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
+                            -Dsonar.sources=. \
+                            -Dsonar.java.binaries=target/classes \
+                            -Dsonar.java.libraries=target/**/*.jar
+                            -Djavax.net.ssl.trustStorePassword=changeit
                     '''
                 }
             }
