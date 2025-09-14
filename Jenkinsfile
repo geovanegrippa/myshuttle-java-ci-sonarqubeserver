@@ -2,7 +2,7 @@ pipeline {
     agent { label 'vm-agent-linux-01' }
 
     environment {
-        NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
+        //NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
         // Variáveis que você já tinha no Azure
         SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')  // ou definir como string
         SONARQUBE_PROJECT_NAME = "MyShuttle"
@@ -74,7 +74,7 @@ pipeline {
                 withSonarQubeEnv('sonarqube_server') {
                     sh '''
                         export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
-                        /opt/sonar-scanner/bin/sonar-scanner \
+                        sonar-scanner \
                             -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
                             -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
                             -Dsonar.sources=. \
