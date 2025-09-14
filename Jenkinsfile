@@ -9,6 +9,7 @@ pipeline {
         SONAR_CERT_PATH = "/usr/local/share/ca-certificates/sonar.crt"
         SONAR_KEYSTORE = "/usr/local/share/ca-certificates/sonar.jks"
         NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
+        JAVA_TOOL_OPTIONS = "-Djavax.net.ssl.trustStore=/usr/local/share/ca-certificates/sonar.jks -Djavax.net.ssl.trustStorePassword=changeit"
     }
 
     stages {
@@ -72,7 +73,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube_server') {
                     sh '''
-                        export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
+                        //export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
                         
                         /opt/sonar-scanner/bin/sonar-scanner \
                             -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
@@ -87,10 +88,8 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                withSonarQubeEnv('sonarqube_server') {
-                    timeout(time: 10, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
