@@ -11,7 +11,7 @@ pipeline {
 
     stages {
         stage('Detectar JAVA_HOME') {
-            when { expression { false } }
+            when { expression { true } }
             steps {
                 sh '''
                     set -e
