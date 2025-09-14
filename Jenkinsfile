@@ -59,7 +59,7 @@ pipeline {
                         keytool -importcert \
                             -file ${env.SONAR_CERT_PATH} \
                             -alias sonar \
-                            -keystore ${env.SONAR_KEYSTORE} \
+                            -keystore $JAVA_HOME/lib/security/cacerts \
                             -storepass changeit \
                             -noprompt
                         """
