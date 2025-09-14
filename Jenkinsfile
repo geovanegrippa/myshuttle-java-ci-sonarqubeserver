@@ -78,7 +78,8 @@ pipeline {
                             -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
                             -Dsonar.sources=. \
                             -Dsonar.java.binaries=target/classes \
-                            -Dsonar.java.libraries=target/**/*.jar
+                            -Dsonar.java.libraries=target/**/*.jar \
+                            -Dsonar.login=$SONAR_TOKEN
                     '''
                 }
             }
@@ -86,7 +87,7 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 15, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
