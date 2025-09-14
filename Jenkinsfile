@@ -3,13 +3,12 @@ pipeline {
 
     environment {
         //NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
-        // Variáveis que você já tinha no Azure
-        SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')  // ou definir como string
+        SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')
         SONARQUBE_PROJECT_NAME = "MyShuttle"
         SONAR_HOST_URL = "https://sonarqube.local"
-        SONAR_TOKEN = credentials('sonar_token')  // precisa estar configurado no Jenkins
+        SONAR_TOKEN = credentials('sonar_token') 
         SONAR_CERT_PATH = "/usr/local/share/ca-certificates/sonar.crt"
-        SONAR_KEYSTORE = "/usr/local/share/ca-certificates/sonar.jks"
+        SONAR_KEYSTORE = "$JAVA_HOME/lib/security/cacerts"
     }
 
     stages {
@@ -73,8 +72,9 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube_server') {
                     sh '''
-                        export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
-                        sonar-scanner \
+                        #export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
+                        
+                        /opt/sonar-scanner/bin/sonar-scanner \
                             -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
                             -Dsonar.projectName=$SONARQUBE_PROJECT_NAME \
                             -Dsonar.sources=. \
