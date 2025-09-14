@@ -8,7 +8,7 @@ pipeline {
         SONAR_HOST_URL = "https://sonarqube.local"
         SONAR_TOKEN = credentials('sonar_token') 
         SONAR_CERT_PATH = "/usr/local/share/ca-certificates/sonar.crt"
-        SONAR_KEYSTORE = "$JAVA_HOME/lib/security/cacerts"
+        SONAR_KEYSTORE = "/usr/local/share/ca-certificates/sonar.jks"
     }
 
     stages {
@@ -59,7 +59,7 @@ pipeline {
                         keytool -importcert \
                             -file ${env.SONAR_CERT_PATH} \
                             -alias sonar \
-                            -keystore $JAVA_HOME/lib/security/cacerts \
+                            -keystore ${env.SONAR_KEYSTORE} \
                             -storepass changeit \
                             -noprompt
                         """
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube_server') {
                     sh '''
-                        #export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
+                        export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=${SONAR_KEYSTORE} -Djavax.net.ssl.trustStorePassword=changeit"
                         
                         /opt/sonar-scanner/bin/sonar-scanner \
                             -Dsonar.projectKey=$SONARQUBE_PROJECT_KEY \
