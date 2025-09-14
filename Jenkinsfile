@@ -84,12 +84,14 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.java.binaries=target/classes \
                             -Dsonar.java.libraries=target/**/*.jar \
+                            -Dsonar.qualitygate.wait=true
                     '''
                 }
             }
         }
 
         stage('Quality Gate') {
+            when { expression { false } }
             steps {
                 timeout(time: 15, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
