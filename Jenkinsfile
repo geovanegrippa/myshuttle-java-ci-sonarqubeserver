@@ -5,7 +5,7 @@ pipeline {
         SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')
         SONARQUBE_PROJECT_NAME = "MyShuttle"
         SONAR_HOST_URL = "https://sonarqube.local"
-        //NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
+        NODE_EXTRA_CA_CERTS = "/usr/local/share/ca-certificates/sonar.crt"
         JAVA_TOOL_OPTIONS = "-Djavax.net.ssl.trustStore=/usr/local/share/ca-certificates/sonar.jks -Djavax.net.ssl.trustStorePassword=changeit"
     }
 
