@@ -11,8 +11,9 @@ pipeline {
     stages {
 
         stage('Checkout') {
+            when { expression { false } }
             steps {
-                git branch: 'origin/master',
+                git branch: 'master',
                     url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
                     credentialsId: 'myshuttle-git-token-id'
             }
