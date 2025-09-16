@@ -10,12 +10,15 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            when { expression { false } }
-            steps {
-                git branch: 'master',
-                    url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
-                    credentialsId: 'myshuttle-git-token-id'
+        stages {
+            stage('Checkout') {
+                steps {
+                    git(
+                        url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
+                        branch: '*/master',
+                        credentialsId: 'myshuttle-git-token-id'
+                    )
+                }
             }
         }        
 
