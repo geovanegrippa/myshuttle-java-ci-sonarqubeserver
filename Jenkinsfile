@@ -12,7 +12,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
                     credentialsId: 'myshuttle-git-token-id'
             }
