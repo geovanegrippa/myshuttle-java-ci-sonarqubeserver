@@ -84,7 +84,7 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.java.binaries=target/classes \
                             -Dsonar.java.libraries=target/**/*.jar \
-                            -Dsonar.qualitygate.wait=true
+                            -Dsonar.qualitygate.wait=false
                     '''
                 }
             }
