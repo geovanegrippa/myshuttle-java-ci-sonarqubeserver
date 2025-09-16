@@ -14,7 +14,7 @@ pipeline {
             steps {
                 git(
                     url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
-                    branch: '*/master',
+                    branch: 'master',
                     credentialsId: 'myshuttle-git-token-id'
                 )
             }
