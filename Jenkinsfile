@@ -10,17 +10,16 @@ pipeline {
 
     stages {
 
-        stages {
-            stage('Checkout') {
-                steps {
-                    git(
-                        url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
-                        branch: '*/master',
-                        credentialsId: 'myshuttle-git-token-id'
-                    )
-                }
+        stage('Checkout') {
+            steps {
+                git(
+                    url: 'https://github.com/geovanegrippa/myshuttle-java-ci-sonarqubeserver.git',
+                    branch: '*/master',
+                    credentialsId: 'myshuttle-git-token-id'
+                )
             }
-        }        
+        }
+      
 
          stage('Build/Test Maven') {
             steps {
