@@ -4,6 +4,7 @@ pipeline {
     environment {
         SONARQUBE_PROJECT_KEY = credentials('sonarqube_project_key')
         SONARQUBE_PROJECT_NAME = "MyShuttle"
+        JAVA_TOOL_OPTIONS = "-Djavax.net.ssl.trustStore=/usr/local/share/ca-certificates/sonar.jks -Djavax.net.ssl.trustStorePassword=changeit"
     }
 
     stages {
